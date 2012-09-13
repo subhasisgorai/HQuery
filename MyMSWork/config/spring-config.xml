@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD//BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="dialect" class="org.hquery.querygen.dialect.HiveDialect"
+		singleton="true" />
+	<bean id="queryGenerator" class="org.hquery.querygen.impl.HiveQueryGenerator"
+		singleton="false">
+		<constructor-arg>
+			<ref local="dialect" />
+		</constructor-arg>
+	</bean>
+	<bean id="queryExecutor" class="org.hquery.queryExecutor.impl.HiveExecutor"
+		singleton="false" />
+	<bean id="statusChecker" class="org.hquery.status.impl.JobStatusCheckerImpl"
+		singleton="true" />
+	<bean id="metaInformationService" class="org.hquery.metastore.impl.HiveMetaInformationService"
+		singleton="true" init-method="init" destroy-method="destroy">
+		<constructor-arg type="java.lang.String" value="default"/>
+	</bean>
+	<bean id="hQueryAssembler" class="org.hquery.assembler.HQueryAssembler"
+		singleton="true">
+		<property name="queryGenerator">
+			<ref local="queryGenerator" />
+		</property>
+		<property name="queryExecutor">
+			<ref local="queryExecutor" />
+		</property>
+		<property name="statusChecker">
+			<ref local="statusChecker" />
+		</property>
+		<property name="metaInformationService">
+			<ref local="metaInformationService"/>
+		</property>
+	</bean>
+</beans>

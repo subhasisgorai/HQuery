@@ -19,13 +19,14 @@ public class TestHQueryClient {
 
 		Table table1 = new Table("Test_Table1");
 		Table table2 = new Table("Test_Table2");
+		Table table3 = new Table("Test_Table3");
 
 		Column testColumn1 = new Column("Col1", DataType.INT)
 				.setOwningTable(table1);
 		Column testColumn2 = new Column("Col2", DataType.STRING)
-		.setOwningTable(table1);
+				.setOwningTable(table1);
 		Column testColumn3 = new Column("Col3", DataType.INT)
-		.setOwningTable(table2);
+				.setOwningTable(table2);
 		table1.addProjectedColumn(testColumn1);
 		table1.addProjectedColumn(testColumn2);
 		table1.addProjectedColumn(testColumn3);
@@ -51,8 +52,11 @@ public class TestHQueryClient {
 
 		table1.setDistinct(true);
 
-		query.setTable(table1.joinTable(table2, new Column("src_join",
-				DataType.INT), new Column("dest_join", DataType.INT)));
+		query.setTable(table1.joinTable(table2,
+				new Column("src_join", DataType.INT),
+				new Column("dest_join", DataType.INT)).joinTable(table3,
+				new Column("Col6", DataType.INT).setOwningTable(table2),
+				new Column("Col7", DataType.INT).setOwningTable(table3)));
 
 		query.setQueryType(QueryType.SELECT_QUERY);
 

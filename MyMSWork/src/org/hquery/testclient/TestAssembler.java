@@ -21,7 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class TestAssembler {
 	public static void main(String[] args) throws Exception{
 		testHQuery1();
-		//testHQuery2();
+		testHQuery2();
 
 	}
 

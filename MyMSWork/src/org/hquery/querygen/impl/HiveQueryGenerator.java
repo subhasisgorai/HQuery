@@ -86,9 +86,9 @@ public class HiveQueryGenerator implements QueryGenerator, QueryElementVisitor {
 		Map<Column, Map<Table, Column>> joinStructure = table
 				.getJoinStructure();
 		if (joinStructure != null && joinStructure.size() > 0) {
-			fromTablesBuffer.append(JOIN);
 			Set<Column> columns = joinStructure.keySet();
 			for (Column column : columns) {
+				fromTablesBuffer.append(JOIN);
 				Map<Table, Column> map = joinStructure.get(column);
 				Set<Table> tables = map.keySet();
 				for (Table joinTable : tables) {

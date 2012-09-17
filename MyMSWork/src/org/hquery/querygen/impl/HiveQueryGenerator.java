@@ -11,6 +11,7 @@ import static org.hquery.common.util.HQueryConstants.SPACE_STRING;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.hquery.querygen.QueryGenerator;
 import org.hquery.querygen.dbobjects.Column;
 import org.hquery.querygen.dbobjects.LogicalOperator;
@@ -93,6 +94,10 @@ public class HiveQueryGenerator implements QueryGenerator, QueryElementVisitor {
 			fromTablesBuffer.append(SPACE_STRING);
 		}
 		fromTablesBuffer.append(table.getTableName());
+		processJoinStructure(table);
+	}
+
+	public void processJoinStructure(Table table) {
 		Map<Column, Map<Table, Column>> joinStructure = table
 				.getJoinStructure();
 		if (joinStructure != null && joinStructure.size() > 0) {
@@ -107,6 +112,11 @@ public class HiveQueryGenerator implements QueryGenerator, QueryElementVisitor {
 					fromTablesBuffer.append(table.getTableName() + DOT + column
 							+ LogicalOperator.EQ + joinTable + DOT
 							+ map.get(joinTable));
+					if (joinTable.getJoinStructure() != null
+							&& !CollectionUtils.isEmpty(joinTable
+									.getJoinStructure().keySet())) {
+						processJoinStructure(joinTable);
+					}
 				}
 			}
 		}

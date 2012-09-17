@@ -51,12 +51,13 @@ public class TestHQueryClient {
 		table1.setFilter(filterDecorator);
 
 		table1.setDistinct(true);
+		table2.joinTable(table3,
+				new Column("Col6", DataType.INT).setOwningTable(table2),
+				new Column("Col7", DataType.INT).setOwningTable(table3));
 
 		query.setTable(table1.joinTable(table2,
 				new Column("src_join", DataType.INT),
-				new Column("dest_join", DataType.INT)).joinTable(table3,
-				new Column("Col6", DataType.INT).setOwningTable(table2),
-				new Column("Col7", DataType.INT).setOwningTable(table3)));
+				new Column("dest_join", DataType.INT)));
 
 		query.setQueryType(QueryType.SELECT_QUERY);
 

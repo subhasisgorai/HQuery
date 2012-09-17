@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hquery.querygen.filter.Filter;
@@ -96,8 +97,10 @@ public class Table implements QueryElement {
 
 		visitor.setProcessingProjectedColumnsOver(true);
 
-		for (Column column : groupByColumns) {
-			column.accept(visitor);
+		if (!CollectionUtils.isEmpty(groupByColumns)) {
+			for (Column column : groupByColumns) {
+				column.accept(visitor);
+			}
 		}
 
 		visitor.visit(this);

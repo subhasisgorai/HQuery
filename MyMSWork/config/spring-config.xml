@@ -18,7 +18,7 @@
 		<constructor-arg type="java.lang.String" value="default"/>
 	</bean>
 	<bean id="hQueryAssembler" class="org.hquery.assembler.HQueryAssembler"
-		singleton="true">
+		singleton="false">
 		<property name="queryGenerator">
 			<ref local="queryGenerator" />
 		</property>

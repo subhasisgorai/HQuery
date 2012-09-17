@@ -15,5 +15,6 @@ public interface HQueryConstants {
 	public static final String SINGLE_QUOTE = "'";
 	public static final String QUERY = "query";
 	public static final String USER_PREF = "user_pref";
+	public static final String AS_STRING = " as ";
 
 }

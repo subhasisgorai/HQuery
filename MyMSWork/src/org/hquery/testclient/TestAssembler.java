@@ -12,6 +12,7 @@ import org.hquery.querygen.dbobjects.Column;
 import org.hquery.querygen.dbobjects.Column.DataType;
 import org.hquery.querygen.dbobjects.LogicalOperator;
 import org.hquery.querygen.dbobjects.Table;
+import org.hquery.querygen.dbobjects.VirtualTable;
 import org.hquery.querygen.filter.Filter;
 import org.hquery.querygen.filter.decorator.FilterDecorator;
 import org.hquery.querygen.query.Query;
@@ -19,9 +20,41 @@ import org.hquery.querygen.query.QueryType;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TestAssembler {
-	public static void main(String[] args) throws Exception{
-		testHQuery1();
-		testHQuery2();
+	public static void main(String[] args) throws Exception {
+		testHQuery3();
+	}
+
+	public static void testHQuery3() {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
+				"spring-config.xml");
+
+		Query query1 = new Query();
+		Table records = new Table("records");
+		Column year = new Column("year", DataType.STRING)
+				.setOwningTable(records);
+		Column temperature = new Column("temperature", DataType.INT, "temp")
+				.setOwningTable(records).setFunctionName("max");
+		records.addProjectedColumn(year);
+		records.addProjectedColumn(temperature);
+		records.addGroupByColumn(year);
+		query1.setTable(records);
+		query1.setQueryType(QueryType.SELECT_QUERY);
+
+		String queryString = ((HQueryAssembler) ctx.getBean("hQueryAssembler"))
+				.getQueryString(query1);
+
+		VirtualTable vTable = new VirtualTable("max_temp");
+		vTable.setQuery(query1);
+		vTable.setQueryString(queryString);
+		vTable.addProjectedColumn(new Column("year", DataType.STRING)
+				.setOwningTable(vTable));
+		vTable.addProjectedColumn(new Column("temp", DataType.INT)
+				.setOwningTable(vTable));
+		Query query2 = new Query();
+		query2.setQueryType(QueryType.SELECT_QUERY);
+		query2.setTable(vTable);
+		System.out.println(((HQueryAssembler) ctx.getBean("hQueryAssembler"))
+				.getQueryString(query2));
 
 	}
 

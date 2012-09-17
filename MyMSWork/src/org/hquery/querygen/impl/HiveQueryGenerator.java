@@ -4,6 +4,9 @@ import static org.hquery.common.util.HQueryConstants.COMMA;
 import static org.hquery.common.util.HQueryConstants.DOT;
 import static org.hquery.common.util.HQueryConstants.JOIN;
 import static org.hquery.common.util.HQueryConstants.ON;
+import static org.hquery.common.util.HQueryConstants.STARTING_BRACE;
+import static org.hquery.common.util.HQueryConstants.ENDING_BRACE;
+import static org.hquery.common.util.HQueryConstants.SPACE_STRING;
 
 import java.util.Map;
 import java.util.Set;
@@ -12,6 +15,7 @@ import org.hquery.querygen.QueryGenerator;
 import org.hquery.querygen.dbobjects.Column;
 import org.hquery.querygen.dbobjects.LogicalOperator;
 import org.hquery.querygen.dbobjects.Table;
+import org.hquery.querygen.dbobjects.VirtualTable;
 import org.hquery.querygen.dialect.HiveDialect;
 import org.hquery.querygen.query.Query;
 import org.hquery.querygen.query.QueryType;
@@ -81,6 +85,12 @@ public class HiveQueryGenerator implements QueryGenerator, QueryElementVisitor {
 	public void visit(Table table) {
 		if (fromTablesBuffer == null) {
 			fromTablesBuffer = new StringBuffer();
+		}
+		if (table instanceof VirtualTable) {
+			fromTablesBuffer.append(STARTING_BRACE);
+			fromTablesBuffer.append(((VirtualTable) table).getQueryString());
+			fromTablesBuffer.append(ENDING_BRACE);
+			fromTablesBuffer.append(SPACE_STRING);
 		}
 		fromTablesBuffer.append(table.getTableName());
 		Map<Column, Map<Table, Column>> joinStructure = table

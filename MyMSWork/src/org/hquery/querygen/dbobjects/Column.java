@@ -4,6 +4,7 @@ import static org.hquery.common.util.HQueryConstants.DOT;
 import static org.hquery.common.util.HQueryConstants.EMPTY_STRING;
 import static org.hquery.common.util.HQueryConstants.ENDING_BRACE;
 import static org.hquery.common.util.HQueryConstants.STARTING_BRACE;
+import static org.hquery.common.util.HQueryConstants.AS_STRING;
 
 import org.apache.commons.lang.StringUtils;
 import org.hquery.querygen.visitor.QueryElement;
@@ -15,6 +16,15 @@ public class Column implements QueryElement {
 	private DataType dataType;
 	private Table owningTable;
 	private String functionName;
+	private String alias;
+
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
 
 	public boolean hasFunction() {
 		return (!StringUtils.isBlank(functionName));
@@ -62,6 +72,12 @@ public class Column implements QueryElement {
 		this.dataType = columnType;
 	}
 
+	public Column(String columnName, DataType columnType, String alias) {
+		this.columnName = columnName;
+		this.dataType = columnType;
+		this.alias = alias;
+	}
+
 	public Table getOwningTable() {
 		return owningTable;
 	}
@@ -80,9 +96,14 @@ public class Column implements QueryElement {
 		StringBuffer columnString = new StringBuffer()
 				.append((hasFunction()) ? functionName : EMPTY_STRING)
 				.append((hasFunction()) ? STARTING_BRACE : EMPTY_STRING)
-				.append(this.getOwningTable()).append(DOT)
+				.append(this.getOwningTable())
+				.append(DOT)
 				.append(this.getColumnName())
-				.append((hasFunction()) ? ENDING_BRACE : EMPTY_STRING);
+				.append((hasFunction()) ? ENDING_BRACE : EMPTY_STRING)
+				.append(!(StringUtils.isBlank(this.getAlias())) ? AS_STRING
+						: EMPTY_STRING)
+				.append(!(StringUtils.isBlank(this.getAlias())) ? this
+						.getAlias() : EMPTY_STRING);
 		return columnString.toString();
 	}
 

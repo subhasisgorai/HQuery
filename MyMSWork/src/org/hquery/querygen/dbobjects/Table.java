@@ -37,7 +37,19 @@ public class Table implements QueryElement {
 	}
 
 	public void setProjectedColumns(List<Column> columns) {
+		assert (projectionString == null) : "projected columns can't be set when projection is not null";
 		this.projectedColumns = columns;
+	}
+
+	private String projectionString;
+
+	public String getProjectionString() {
+		return projectionString;
+	}
+
+	public void setProjectionString(String projectionString) {
+		assert (projectedColumns == null) : "Can't set projection string when projected columns are also set";
+		this.projectionString = projectionString;
 	}
 
 	public Map<Column, Map<Table, Column>> getJoinStructure() {
@@ -49,6 +61,7 @@ public class Table implements QueryElement {
 	}
 
 	public void addProjectedColumn(Column column) {
+		assert (projectionString == null) : "projected columns can't be set when projection is not null";
 		if (projectedColumns == null)
 			projectedColumns = new ArrayList<Column>();
 		projectedColumns.add(column);
@@ -91,8 +104,10 @@ public class Table implements QueryElement {
 
 	@Override
 	public void accept(QueryElementVisitor visitor) {
-		for (Column column : projectedColumns) {
-			column.accept(visitor);
+		if (!CollectionUtils.isEmpty(projectedColumns)) {
+			for (Column column : projectedColumns) {
+				column.accept(visitor);
+			}
 		}
 
 		visitor.setProcessingProjectedColumnsOver(true);

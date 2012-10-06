@@ -4,6 +4,7 @@ import static org.hquery.common.util.HQueryConstants.QUERY;
 import static org.hquery.common.util.HQueryConstants.USER_PREF;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,6 +20,8 @@ import org.hquery.queryExecutor.QueryExecutor;
 import org.hquery.querygen.QueryGenerator;
 import org.hquery.querygen.query.Query;
 import org.hquery.status.StatusChecker;
+import org.hquery.status.impl.JobStatusCheckerImpl.StatusCheckerThread;
+import org.hquery.status.impl.JobStatusCheckerImpl.StatusEnum;
 
 public class HQueryAssembler {
 	private QueryGenerator queryGenerator;
@@ -64,16 +67,20 @@ public class HQueryAssembler {
 		context.putInContext(QUERY, queryString);
 		context.putInContext(USER_PREF, preferences);
 		String sessionId = queryExecutor.executeQuery(context);
-		statusChecker.intiateStatusCheck(sessionId);
+		StatusCheckerThread thread = statusChecker
+				.intiateStatusCheck(sessionId);
+		queryExecutor.setStatusCheckerThread(thread);
 		return sessionId;
 	}
 
 	public String checkStatus(String sessionId) {
 		assert (StringUtils.isNotBlank(sessionId)) : "Session id shouldn't be null for status checking";
-		return statusChecker.checkStatus(sessionId);
+		StatusEnum status = statusChecker.checkStatus(sessionId);
+		return (status != null) ? status.toString() : StatusEnum.UNKNOWN
+				.toString();
 	}
 
-	public JobStatus getStatus(String sessionId) {
+	public List<JobStatus> getStatus(String sessionId) {
 		assert (StringUtils.isNotBlank(sessionId)) : "Session id shouldn't be null for getting status";
 		return statusChecker.getStatus(sessionId);
 	}
@@ -106,49 +113,75 @@ public class HQueryAssembler {
 			System.out.println("Job Progress Status: ");
 			System.out.print("Unknown");
 
-			JobStatus currentStatus = getStatus(sessionId);
-			while (currentStatus == null) {
+			StatusEnum overallStatus = statusChecker.checkStatus(sessionId);
+			while (overallStatus == StatusEnum.UNKNOWN) {
 				System.out.print("..");
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				currentStatus = getStatus(sessionId);
+				overallStatus = statusChecker.checkStatus(sessionId); //this is a rough status
 			}
 
-			while (!currentStatus.isJobComplete()) {
-				if (statusMap == null)
-					statusMap = new HashMap<String, Integer>();
-				if (statusMap.get(sessionId) == null
-						|| statusMap.get(sessionId).intValue() != currentStatus
-								.getRunState()) {
-					synchronized (statusMap) {
-						statusMap.put(sessionId, currentStatus.getRunState());
+			if (statusMap == null)
+				statusMap = new HashMap<String, Integer>();
+			
+			while (overallStatus != StatusEnum.COMPLETED) {
+
+				List<JobStatus> statuses = getStatus(sessionId);
+				if (statuses != null && !statuses.isEmpty()) { //iterate through the statuses of the jobs belongs a particular session
+					int prepCounter = 0;
+					int runningCounter = 0;
+					try {
+						for (JobStatus status : statuses) {
+							if (status.getRunState() == JobStatus.RUNNING)
+								runningCounter++;
+							else if (status.getRunState() == JobStatus.PREP)
+								prepCounter++;
+						}
+					} catch (Throwable t) {
+						t.printStackTrace();
 					}
-					if (currentStatus.getRunState() == JobStatus.PREP)
+					if ((prepCounter == statuses.size())
+							&& (statusMap.get(sessionId) == null || statusMap
+									.get(sessionId).intValue() != JobStatus.PREP)) {
+						synchronized (statusMap) {
+							statusMap.put(sessionId, JobStatus.PREP);
+						}
 						System.out.print("\nPreparing ");
-					else if (currentStatus.getRunState() == JobStatus.RUNNING) {
-						System.out.println("\nRunning");
-					}
-				} else {
-					if (currentStatus.getRunState() == JobStatus.RUNNING) {
-						System.out
-								.printf("\tMap progress: %.1f%%, Reduce Progress: %.1f%%%n",
-										currentStatus.mapProgress() * 100,
-										currentStatus.reduceProgress() * 100);
+					} else if ((runningCounter > 0)
+							&& (statusMap.get(sessionId) == null || statusMap
+									.get(sessionId).intValue() != JobStatus.RUNNING)) {
+						synchronized (statusMap) {
+							statusMap.put(sessionId, JobStatus.RUNNING);
+						}
+						System.out.println("\nRunning ");
+					} else if ((runningCounter > 0)
+							&& (statusMap.get(sessionId) == null || statusMap
+									.get(sessionId).intValue() == JobStatus.RUNNING)) {
+						for (JobStatus status : statuses) {
+							System.out
+									.printf("\t[Job Id %d] Map progress: %.1f%%, Reduce Progress: %.1f%%%n",
+											status.getJobID().getId(),
+											status.mapProgress() * 100,
+											status.reduceProgress() * 100);
+						}
 					} else {
 						System.out.print("..");
 					}
+
 				}
+
 				try {
 					Thread.sleep(Long.parseLong(HQueryUtil.getResourceString(
 							"hquery-conf", "status.checker.monitor.interval")));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				currentStatus = getStatus(sessionId);
+				overallStatus = statusChecker.checkStatus(sessionId);
 			}
+
 			System.out.println(checkStatus(sessionId));
 
 		}

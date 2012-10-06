@@ -1,11 +1,15 @@
 package org.hquery.status;
 
+import java.util.List;
+
 import org.apache.hadoop.mapred.JobStatus;
+import org.hquery.status.impl.JobStatusCheckerImpl.StatusCheckerThread;
+import org.hquery.status.impl.JobStatusCheckerImpl.StatusEnum;
 
 public interface StatusChecker {
-	public abstract void intiateStatusCheck(String sessionId);
+	public abstract StatusCheckerThread intiateStatusCheck(String sessionId);
 
-	public abstract String checkStatus(String sessionId);
+	public abstract StatusEnum checkStatus(String sessionId);
 
-	public abstract JobStatus getStatus(String sessionId);
+	public abstract List<JobStatus> getStatus(String sessionId);
 }

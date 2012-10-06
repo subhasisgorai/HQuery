@@ -98,6 +98,10 @@ public class HiveQueryGenerator implements QueryGenerator, QueryElementVisitor {
 	}
 
 	public void processJoinStructure(Table table) {
+		if (projectedColumnsBuffer == null) {
+			projectedColumnsBuffer = new StringBuffer();
+			projectedColumnsBuffer.append(table.getProjectionString());
+		}
 		Map<Column, Map<Table, Column>> joinStructure = table
 				.getJoinStructure();
 		if (joinStructure != null && joinStructure.size() > 0) {
@@ -107,6 +111,13 @@ public class HiveQueryGenerator implements QueryGenerator, QueryElementVisitor {
 				Map<Table, Column> map = joinStructure.get(column);
 				Set<Table> tables = map.keySet();
 				for (Table joinTable : tables) {
+					if (joinTable instanceof VirtualTable) {
+						fromTablesBuffer.append(STARTING_BRACE);
+						fromTablesBuffer.append(((VirtualTable) joinTable)
+								.getQueryString());
+						fromTablesBuffer.append(ENDING_BRACE);
+						fromTablesBuffer.append(SPACE_STRING);
+					}
 					fromTablesBuffer.append(joinTable);
 					fromTablesBuffer.append(ON);
 					fromTablesBuffer.append(table.getTableName() + DOT + column

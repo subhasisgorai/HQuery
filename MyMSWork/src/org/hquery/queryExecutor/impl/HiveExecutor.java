@@ -24,6 +24,7 @@ import org.hquery.common.util.HQueryUtil;
 import org.hquery.common.util.UserPreferences;
 import org.hquery.queryExecutor.QueryExecutor;
 import org.hquery.querygen.dialect.HiveDialect;
+import org.hquery.status.impl.JobStatusCheckerImpl.StatusCheckerThread;
 
 public class HiveExecutor implements QueryExecutor {
 
@@ -31,6 +32,12 @@ public class HiveExecutor implements QueryExecutor {
 	private String userOutputFile;
 	private String delimiter;
 	private String hqueryFileLocation;
+	private String sessionId;
+	private StatusCheckerThread statusCheckerThread;
+
+	public void setStatusCheckerThread(StatusCheckerThread statusCheckerThread) {
+		this.statusCheckerThread = statusCheckerThread;
+	}
 
 	private static Logger logger = Logger.getLogger(HiveExecutor.class);
 
@@ -44,7 +51,7 @@ public class HiveExecutor implements QueryExecutor {
 		HiveConf conf = new HiveConf(this.getClass());
 		SessionState.start(conf);
 		SessionState sessionState = SessionState.get();
-		String sessionId = sessionState.getSessionId();
+		sessionId = sessionState.getSessionId();
 
 		if (StringUtils.isBlank(this.sqlString))
 			this.sqlString = (String) ctx.get(QUERY);
@@ -106,7 +113,7 @@ public class HiveExecutor implements QueryExecutor {
 				if (logger.isDebugEnabled())
 					logger.debug("Executing following query: " + sqlString);
 				res = stmt.executeQuery(sqlString);
-
+				statusCheckerThread.requestStop();
 				if (logger.isDebugEnabled())
 					logger.debug("Query execution over, processing and writing output .. ");
 				String fileProcessingString = HQueryUtil

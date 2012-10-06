@@ -22,8 +22,9 @@ public class Column implements QueryElement {
 		return alias;
 	}
 
-	public void setAlias(String alias) {
+	public Column setAlias(String alias) {
 		this.alias = alias;
+		return this;
 	}
 
 	public boolean hasFunction() {

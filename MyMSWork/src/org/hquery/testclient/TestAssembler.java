@@ -21,7 +21,95 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class TestAssembler {
 	public static void main(String[] args) throws Exception {
-		testHQuery3();
+		testHQuery4();
+	}
+
+	public static void testHQuery4() {
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(
+				"spring-config.xml");
+
+		Query impressionQuery = new Query();
+		Table impressionTable = new Table("test_clickdata");
+		Column sec_column_impressiom = new Column("sec", DataType.STRING)
+				.setOwningTable(impressionTable);
+		impressionTable.addProjectedColumn(new Column("ts", DataType.BIGINT)
+				.setOwningTable(impressionTable).setFunctionName("count")
+				.setAlias("impressions"));
+		impressionTable.addProjectedColumn(sec_column_impressiom);
+		Filter impressionFilter = new Filter(new Column("event_type",
+				DataType.STRING).setOwningTable(impressionTable),
+				LogicalOperator.EQ, "p");
+		impressionTable.setFilter(impressionFilter);
+		impressionTable.addGroupByColumn(sec_column_impressiom);
+		impressionQuery.setQueryType(QueryType.SELECT_QUERY);
+		impressionQuery.setTable(impressionTable);
+
+		String impressionString = ((HQueryAssembler) ctx
+				.getBean("hQueryAssembler")).getQueryString(impressionQuery);
+
+		Query clickQuery = new Query();
+		Table clickTable = new Table("test_clickdata");
+		Column sec_column_click = new Column("sec", DataType.STRING)
+				.setOwningTable(clickTable);
+		clickTable.addProjectedColumn(new Column("ts", DataType.BIGINT)
+				.setOwningTable(clickTable).setFunctionName("count")
+				.setAlias("clicks"));
+		clickTable.addProjectedColumn(sec_column_click);
+		Filter clickFilter = new Filter(new Column("event_type",
+				DataType.STRING).setOwningTable(clickTable),
+				LogicalOperator.EQ, "c");
+		clickTable.setFilter(clickFilter);
+		clickTable.addGroupByColumn(sec_column_click);
+		clickQuery.setQueryType(QueryType.SELECT_QUERY);
+		clickQuery.setTable(clickTable);
+
+		String clickString = ((HQueryAssembler) ctx.getBean("hQueryAssembler"))
+				.getQueryString(clickQuery);
+
+		Query finalQuery = new Query();
+
+		VirtualTable impTable = new VirtualTable("i");
+		impTable.setQueryString(impressionString);
+
+		VirtualTable clkTable = new VirtualTable("c");
+		clkTable.setQueryString(clickString);
+
+		impTable.joinTable(clkTable,
+				new Column("sec", DataType.STRING).setOwningTable(impTable),
+				new Column("sec", DataType.STRING).setOwningTable(clkTable));
+
+		impTable.setProjectionString(" i.sec, (c.clicks/i.impressions)");
+
+		finalQuery.setTable(impTable);
+		finalQuery.setQueryType(QueryType.SELECT_QUERY);
+		System.out.println(((HQueryAssembler) ctx.getBean("hQueryAssembler"))
+				.getQueryString(finalQuery));
+
+		HQueryAssembler assembler = (HQueryAssembler) ctx
+				.getBean("hQueryAssembler");
+		UserPreferences pref = new UserPreferences();
+		pref.setOutputFileType(FileType.CSV_TYPE);
+		pref.setOutputFile("/Users/subhasig/test_ctr.txt");
+
+		String sessionId = assembler.executeQuery(finalQuery, pref);
+		System.out.println("Session Id: " + sessionId);
+
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		assembler.printRTStatus(sessionId);
+
+		try {
+			Thread.sleep(Long.parseLong(HQueryUtil.getResourceString(
+					"hquery-conf", "hquery.cooldown.period"))); //giving other daemon thread a chance to graceful stop 
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static void testHQuery3() {
@@ -44,7 +132,6 @@ public class TestAssembler {
 				.getQueryString(query1);
 
 		VirtualTable vTable = new VirtualTable("max_temp");
-		vTable.setQuery(query1);
 		vTable.setQueryString(queryString);
 		vTable.addProjectedColumn(new Column("year", DataType.STRING)
 				.setOwningTable(vTable));
@@ -157,4 +244,5 @@ public class TestAssembler {
 
 		ctx.registerShutdownHook();
 	}
+
 }

@@ -126,22 +126,18 @@ public class HQueryAssembler {
 
 			if (statusMap == null)
 				statusMap = new HashMap<String, Integer>();
-			
+
 			while (overallStatus != StatusEnum.COMPLETED) {
 
 				List<JobStatus> statuses = getStatus(sessionId);
 				if (statuses != null && !statuses.isEmpty()) { //iterate through the statuses of the jobs belongs a particular session
 					int prepCounter = 0;
 					int runningCounter = 0;
-					try {
-						for (JobStatus status : statuses) {
-							if (status.getRunState() == JobStatus.RUNNING)
-								runningCounter++;
-							else if (status.getRunState() == JobStatus.PREP)
-								prepCounter++;
-						}
-					} catch (Throwable t) {
-						t.printStackTrace();
+					for (JobStatus status : statuses) {
+						if (status.getRunState() == JobStatus.RUNNING)
+							runningCounter++;
+						else if (status.getRunState() == JobStatus.PREP)
+							prepCounter++;
 					}
 					if ((prepCounter == statuses.size())
 							&& (statusMap.get(sessionId) == null || statusMap

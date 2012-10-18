@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="MyMSWork">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/hadoop-conf"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/hive-conf"/>
+        <wb-resource deploy-path="/WEB-INF/lib" source-path="/lib"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/config"/>
+        <dependent-module archiveName="hbase-0.92.0-tests.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hbase-0.92.0-tests.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-logging-api-1.0.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-logging-api-1.0.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="derby-10.4.2.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/derby-10.4.2.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive_contrib.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive_contrib.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="log4j-1.2.16.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/log4j-1.2.16.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-pdk-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-pdk-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-digester-1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-digester-1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="junit-4.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/junit-4.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-exec-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-exec-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-httpclient-3.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-httpclient-3.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-daemon-1.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-daemon-1.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-core-asl-1.8.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/jackson-core-asl-1.8.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="xmlenc-0.52.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/xmlenc-0.52.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hbase-0.92.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hbase-0.92.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-hwi-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-hwi-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-logging-api-1.0.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-logging-api-1.0.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-beanutils-1.7.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-beanutils-1.7.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="datanucleus-enhancer-2.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/datanucleus-enhancer-2.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-thriftfs-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/hadoop-thriftfs-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.4.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/slf4j-api-1.4.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-jdbc-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-jdbc-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-el-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-el-1.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-minicluster-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/hadoop-minicluster-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="json-20090211.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/json-20090211.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jersey-server-1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jersey-server-1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-serde-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-serde-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="datanucleus-connectionpool-2.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/datanucleus-connectionpool-2.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mockito-all-1.8.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/mockito-all-1.8.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-mapper-asl-1.8.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jackson-mapper-asl-1.8.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jets3t-0.6.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jets3t-0.6.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jline-0.9.94.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/jline-0.9.94.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-jaxrs-1.8.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/jackson-jaxrs-1.8.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="mysql-connector-java-5.1.15-bin.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/mysql-connector-java-5.1.15-bin.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jetty-util-6.1.26.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jetty-util-6.1.26.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-capacity-scheduler-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/hadoop-capacity-scheduler-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-cli-1.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-cli-1.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-metastore-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-metastore-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jersey-json-1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jersey-json-1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jersey-core-1.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jersey-core-1.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-shims-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-shims-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jsch-0.1.42.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jsch-0.1.42.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-log4j12-1.4.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/slf4j-log4j12-1.4.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jetty-6.1.26.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jetty-6.1.26.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="servlet-api-2.5-20081211.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/servlet-api-2.5-20081211.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-client-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/hadoop-client-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hsqldb-1.8.0.10.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/hsqldb-1.8.0.10.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="guava-r09.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/guava-r09.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-codec-1.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-api-1.6.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/slf4j-api-1.6.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-builtins-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-builtins-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="aspectjtools-1.6.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/aspectjtools-1.6.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-core-asl-1.8.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jackson-core-asl-1.8.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="libfb303-0.7.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/libfb303-0.7.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-cli-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-cli-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-collections-3.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-collections-3.2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="aspectjrt-1.6.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/aspectjrt-1.6.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-mapper-asl-1.8.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/jackson-mapper-asl-1.8.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-fairscheduler-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/hadoop-fairscheduler-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-logging-1.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-logging-1.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="libfb303.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/libfb303.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-service-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-service-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jdeb-0.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/jdeb-0.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-net-1.4.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-net-1.4.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="antlr-runtime-3.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/antlr-runtime-3.0.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-test-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/hadoop-test-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="asm-3.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/asm-3.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jackson-xc-1.8.8.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/jackson-xc-1.8.8.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="core-3.1.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/core-3.1.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-contrib-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-contrib-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="libthrift.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/libthrift.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-beanutils-core-1.8.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-beanutils-core-1.8.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-codec-1.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-hbase-handler-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-hbase-handler-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-ant-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/hadoop-ant-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-examples-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/hadoop-examples-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="zookeeper-3.4.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/zookeeper-3.4.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-collections-3.2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-collections-3.2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-common-0.9.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-common-0.9.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="kfs-0.2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/kfs-0.2.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-io-2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-io-2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="libthrift-0.7.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/libthrift-0.7.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-dbcp-1.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-dbcp-1.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="JavaEWAH-0.3.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/JavaEWAH-0.3.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="datanucleus-rdbms-2.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/datanucleus-rdbms-2.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-configuration-1.6.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-configuration-1.6.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-cli-1.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-cli-1.2.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="datanucleus-core-2.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/datanucleus-core-2.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hive-hwi-0.9.0.war" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/hive-hwi-0.9.0.war">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-pool-1.5.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-pool-1.5.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="stringtemplate-3.1-b1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/stringtemplate-3.1-b1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-core-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/hadoop-core-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-lang-2.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-lang-2.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jdo2-api-2.3-ec.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/jdo2-api-2.3-ec.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-lang-2.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-lang-2.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-math-2.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/lib/commons-math-2.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="slf4j-log4j12-1.6.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/slf4j-log4j12-1.6.1.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hadoop-tools-1.0.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hadoop-1.0.3/hadoop-tools-1.0.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-logging-1.0.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/MyWorkspace/hive-0.9.0-bin/lib/commons-logging-1.0.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="el-ri-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//Users/subhasig/Desktop/el-ri-1.0.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="MyMSWork"/>
+        <property name="java-output-path" value="/MyMSWork/bin"/>
+    </wb-module>
+</project-modules>

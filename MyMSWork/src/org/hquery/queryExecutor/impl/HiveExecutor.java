@@ -113,7 +113,8 @@ public class HiveExecutor implements QueryExecutor {
 				if (logger.isDebugEnabled())
 					logger.debug("Executing following query: " + sqlString);
 				res = stmt.executeQuery(sqlString);
-				statusCheckerThread.requestStop();
+				if (statusCheckerThread != null)
+					statusCheckerThread.requestStop();
 				if (logger.isDebugEnabled())
 					logger.debug("Query execution over, processing and writing output .. ");
 				String fileProcessingString = HQueryUtil

@@ -17,6 +17,7 @@
 				<f:ajax execute="@form" render="columns" />
 				<f:selectItems value="#{hQueryController.allTables}" />
 			</h:selectManyCheckbox>
+			<h:outputLabel value="Select Columns" />
 			<h:selectManyCheckbox id="columns"
 				value="#{hQueryController.selectedColumns}">
 				<f:selectItems value="#{hQueryController.allColumns}" />

@@ -111,7 +111,7 @@ public class HQueryAssembler {
 		public void run() {
 			System.out.println("\n");
 			System.out.println("Job Progress Status: ");
-			System.out.print("Unknown");
+			System.out.print("Unknown ");
 
 			StatusEnum overallStatus = statusChecker.checkStatus(sessionId);
 			while (overallStatus == StatusEnum.UNKNOWN) {

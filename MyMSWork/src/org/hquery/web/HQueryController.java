@@ -25,7 +25,6 @@ public class HQueryController {
 	public Map<String, List<String>> tableColumnsMap = new HashMap<String, List<String>>();
 
 	public String[] getSelectedTables() {
-		System.out.println("####### selected tables called ####");
 		return selectedTables;
 	}
 

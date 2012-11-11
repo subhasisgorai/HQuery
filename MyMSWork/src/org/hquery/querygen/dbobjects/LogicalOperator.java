@@ -1,5 +1,7 @@
 package org.hquery.querygen.dbobjects;
 
+import org.apache.commons.lang.StringUtils;
+
 public enum LogicalOperator {
 	GT {
 		public String toString() {
@@ -40,6 +42,16 @@ public enum LogicalOperator {
 		public String toString() {
 			return " OR ";
 		}
-	}
+	};
 
+	public static LogicalOperator fromString(String value) {
+		if (!StringUtils.isBlank(value)) {
+			for (LogicalOperator op : LogicalOperator.values()) {
+				if ((value.trim()).equalsIgnoreCase(op.toString().trim())) {
+					return op;
+				}
+			}
+		}
+		return null;
+	}
 }

@@ -19,5 +19,13 @@
 			<property-class>org.hquery.assembler.HQueryAssembler</property-class>
 			<value>#{hQueryAssembler}</value>
 		</managed-property>
-	</managed-bean>  
+	</managed-bean> 
+	<converter>
+	    <converter-id>columnConverter</converter-id>
+	    <converter-class>org.hquery.web.converter.ColumnConverter</converter-class>
+	</converter>
+	<converter>
+		<converter-id>operatorConverter</converter-id>
+		<converter-class>org.hquery.web.converter.OperatorConverter</converter-class>
+	</converter>
 </faces-config>

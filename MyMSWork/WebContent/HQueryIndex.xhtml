@@ -6,7 +6,15 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link type="text/css" rel="stylesheet" href="hquery.css" />
 	<title>HQuery</title>
+	<script type="text/javascript">
+		function show(id) {
+			var element = document.getElementById(id);
+			element.style.display = 'block'
+		}
+	</script>
 </h:head>
 <h:body>
 	<f:view>
@@ -17,11 +25,92 @@
 				<f:ajax execute="@form" render="columns" />
 				<f:selectItems value="#{hQueryController.allTables}" />
 			</h:selectManyCheckbox>
+			<f:verbatim>
+				<hr />
+			</f:verbatim>
 			<h:outputLabel value="Select Columns" />
 			<h:selectManyCheckbox id="columns"
-				value="#{hQueryController.selectedColumns}">
-				<f:selectItems value="#{hQueryController.allColumns}" />
+				value="#{hQueryController.selectedColumns}" layout="pageDirection">
+				<f:selectItems value="#{hQueryController.columns}" />
+				<f:converter converterId="columnConverter" />
+				<f:ajax execute="@form" render="add_filter" />
 			</h:selectManyCheckbox>
+			<h:message for="columns" style="color:red" />
+			<f:verbatim>
+				<hr />
+			</f:verbatim>
+			<h:outputLabel value="Filters" />
+			<br />
+			<h:commandButton value="Add Filter"
+				onclick="show('#{sessionScope.addPanel.clientId}'); return false;" />
+			<br />
+			<h:panelGroup id="tableContainer" layout="block">
+				<h:dataTable id="filters" value="#{hQueryController.filters}"
+					var="filter" border="1"
+					rendered="#{hQueryController.renderFilterTable}"
+					binding="#{hQueryController.table}" styleClass="hquery-table"
+					headerClass="hquery-table-header"
+					rowClasses="hquery-table-odd-row,hquery-table-even-row">
+					<h:column>
+						<f:facet name="header">Outer Operator</f:facet>
+						<h:outputText value="#{filter.outerOperator}">
+							<f:converter converterId="operatorConverter" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Column</f:facet>
+						<h:outputText value="#{filter.column}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Filter Operator</f:facet>
+						<h:outputText value="#{filter.innerOperator}">
+							<f:converter converterId="operatorConverter" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Value</f:facet>
+						<h:outputText value="#{filter.value}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Action</f:facet>
+						<h:commandButton value="Delete"
+							action="#{hQueryController.deleteFilter}" />
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGrid binding="#{sessionScope.addPanel}" columns="2"
+				id="add_filter" style="display: none">
+				<h:outputLabel value="Outer Operator :" />
+				<h:selectOneMenu value="#{hQueryController.outerOperator}"
+					disabled="#{hQueryController.outerOpDisabled}">
+					<f:selectItem itemValue="" itemLabel="" />
+					<f:selectItems value="#{hQueryController.outerOpertaors}" />
+				</h:selectOneMenu>
+				<h:outputLabel value="Column :" />
+				<h:selectOneMenu value="#{hQueryController.filteredColumn}">
+					<f:selectItem itemValue="" itemLabel="" />
+					<f:selectItems value="#{hQueryController.columns}" />
+					<f:converter converterId="columnConverter" />
+				</h:selectOneMenu>
+				<h:outputLabel value="Operator :" />
+				<h:selectOneMenu value="#{hQueryController.innerOperator}">
+					<f:selectItem itemValue="" itemLabel="" />
+					<f:selectItems value="#{hQueryController.innerOperators}" />
+				</h:selectOneMenu>
+				<h:outputLabel value="Value :" />
+				<h:inputText size="10" value="#{hQueryController.value}" />
+				<h:commandButton value="Save" action="#{hQueryController.addFilter}">
+					<f:ajax execute="@form" render="tableContainer add_filter" />
+				</h:commandButton>
+			</h:panelGrid>
+			<f:verbatim>
+				<hr />
+			</f:verbatim>
+			<h:commandButton value="Process"
+				actionListener="#{hQueryController.processQuery}" />
+			<f:verbatim>
+				<hr />
+			</f:verbatim>
 		</h:form>
 
 	</f:view>

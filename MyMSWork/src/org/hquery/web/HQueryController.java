@@ -201,4 +201,59 @@ public class HQueryController {
 		return this.outerOpertaors;
 	}
 
+	private List<Column> groupByColumns;
+
+	public List<Column> getGroupByColumns() {
+		return groupByColumns;
+	}
+
+	public void setGroupByColumns(List<Column> groupByColumns) {
+		this.groupByColumns = groupByColumns;
+	}
+
+	private List<ColumnFunction> columnFunctions;
+
+	public List<ColumnFunction> getColumnFunctions() {
+		return columnFunctions;
+	}
+
+	public void setColumnFunctions(List<ColumnFunction> columnFunctions) {
+		this.columnFunctions = columnFunctions;
+	}
+
+	private UIData functionsTable;
+
+	public UIData getFunctionsTable() {
+		return functionsTable;
+	}
+
+	public void setFunctionsTable(UIData functionsTable) {
+		this.functionsTable = functionsTable;
+	}
+
+	public String addFunction() {
+		if (columnFunctions == null)
+			columnFunctions = new ArrayList<ColumnFunction>();
+		columnFunctions.add(new ColumnFunction(null, ""));
+		return null;
+	}
+
+	public List<String> getFunctionStrings() {
+		MetaInformationService metaService = assembler
+				.getMetaInformationService();
+		List<String> functions = new ArrayList<String>();
+		functions.add("");
+		functions.addAll(metaService.listBuiltInAggregateFunctions());
+		functions.addAll(metaService.listBuiltInAggregateFunctions());
+		return functions;
+	}
+
+	public String deleteFunction() {
+		columnFunctions.remove(functionsTable.getRowData());
+		return null;
+	}
+
+	public boolean isRenderFunctionTable() {
+		return columnFunctions != null && columnFunctions.size() > 0;
+	}
 }

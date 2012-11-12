@@ -18,11 +18,17 @@
 </h:head>
 <h:body>
 	<f:view>
+		<f:verbatim>
+			<img src="HQuery-logo.png" align="left" alt="HQuery Logo" />
+			<br />
+			<br />
+			<br />
+		</f:verbatim>
 		<h:form>
-			<h:outputLabel value="Select tables" />
+			<h:outputLabel value="Select table" />
 			<h:selectManyCheckbox id="tables"
 				value="#{hQueryController.selectedTables}">
-				<f:ajax execute="@form" render="columns" />
+				<f:ajax execute="@form" render="columns groupByColumns add_filter" />
 				<f:selectItems value="#{hQueryController.allTables}" />
 			</h:selectManyCheckbox>
 			<f:verbatim>
@@ -33,7 +39,6 @@
 				value="#{hQueryController.selectedColumns}" layout="pageDirection">
 				<f:selectItems value="#{hQueryController.columns}" />
 				<f:converter converterId="columnConverter" />
-				<f:ajax execute="@form" render="add_filter" />
 			</h:selectManyCheckbox>
 			<h:message for="columns" style="color:red" />
 			<f:verbatim>
@@ -103,6 +108,52 @@
 					<f:ajax execute="@form" render="tableContainer add_filter" />
 				</h:commandButton>
 			</h:panelGrid>
+			<f:verbatim>
+				<hr />
+			</f:verbatim>
+			<h:outputLabel value="Select Group By Columns" />
+			<br />
+			<h:selectManyListbox value="#{hQueryController.groupByColumns}"
+				id="groupByColumns">
+				<f:selectItems value="#{hQueryController.columns}" />
+				<f:converter converterId="columnConverter" />
+			</h:selectManyListbox>
+			<f:verbatim>
+				<hr />
+			</f:verbatim>
+			<h:outputLabel value="Apply Functions on specific Columns" />
+			<br />
+			<h:commandButton value="Add Function"
+				action="#{hQueryController.addFunction}" />
+			<h:dataTable id="functions"
+				value="#{hQueryController.columnFunctions}" var="function"
+				border="1" binding="#{hQueryController.functionsTable}"
+				styleClass="hquery-table" headerClass="hquery-table-header"
+				rowClasses="hquery-table-odd-row,hquery-table-even-row"
+				rendered="#{hQueryController.renderFunctionTable}">
+				<h:column>
+					<f:facet name="header">Column</f:facet>
+					<h:selectOneMenu id="functionColumn" value="#{function.column}"
+						layout="pageDirection">
+						<f:selectItem itemValue="" itemLabel="" />
+						<f:selectItems value="#{hQueryController.selectedColumns}" />
+						<f:converter converterId="columnConverter" />
+					</h:selectOneMenu>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Function</f:facet>
+					<h:selectOneMenu id="functionFunction"
+						value="#{function.functionName}" layout="pageDirection">
+						<f:selectItems value="#{hQueryController.functionStrings}" />
+					</h:selectOneMenu>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Action</f:facet>
+					<h:commandButton value="Delete"
+						action="#{hQueryController.deleteFunction}" />
+				</h:column>
+			</h:dataTable>
+			<br />
 			<f:verbatim>
 				<hr />
 			</f:verbatim>

@@ -41,6 +41,10 @@ public class HQueryAssembler {
 		this.statusChecker = statusChecker;
 	}
 
+	public StatusChecker getStatusChecker() {
+		return this.statusChecker;
+	}
+
 	public void setMetaInformationService(
 			MetaInformationService metaInformationService) {
 		this.metaInformationService = metaInformationService;

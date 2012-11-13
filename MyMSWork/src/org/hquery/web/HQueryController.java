@@ -1,6 +1,7 @@
 package org.hquery.web;
 
 import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,7 +12,9 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
+import org.apache.hadoop.mapred.JobStatus;
 import org.hquery.assembler.HQueryAssembler;
 import org.hquery.common.util.UserPreferences;
 import org.hquery.common.util.UserPreferences.FileType;
@@ -22,6 +25,8 @@ import org.hquery.querygen.dbobjects.Table;
 import org.hquery.querygen.filter.decorator.FilterDecorator;
 import org.hquery.querygen.query.Query;
 import org.hquery.querygen.query.QueryType;
+import org.hquery.status.StatusChecker;
+import org.hquery.status.impl.JobStatusCheckerImpl.StatusEnum;
 
 public class HQueryController {
 	private HQueryAssembler assembler;
@@ -263,8 +268,6 @@ public class HQueryController {
 	}
 
 	public void processQuery(ActionEvent event) {
-		System.out.println("Processing user input ...");
-
 		Query query = new Query();
 		if (selectedTables != null && selectedTables.length > 0
 				&& tableColumnsMap != null) {
@@ -322,18 +325,20 @@ public class HQueryController {
 		pref.setOutputFile("/Users/subhasig/test.txt");
 
 		//now execute the query
-		String sessionId = assembler.executeQuery(query, pref);
-		System.out.println("Session Id: " + sessionId);
+		this.sessionId = assembler.executeQuery(query, pref);
+		System.out.println("Session Id: " + this.sessionId);
+
+		progressMonitorActivated = "true";
 
 		//not required for this web application
-//		try {
-//			Thread.sleep(Long.parseLong(HQueryUtil.getResourceString(
-//					"hquery-conf", "hquery.cooldown.period"))); //giving other daemon thread a chance to graceful stop 
-//		} catch (NumberFormatException e) {
-//			e.printStackTrace();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		//		try {
+		//			Thread.sleep(Long.parseLong(HQueryUtil.getResourceString(
+		//					"hquery-conf", "hquery.cooldown.period"))); //giving other daemon thread a chance to graceful stop 
+		//		} catch (NumberFormatException e) {
+		//			e.printStackTrace();
+		//		} catch (InterruptedException e) {
+		//			e.printStackTrace();
+		//		}
 
 	}
 
@@ -377,6 +382,92 @@ public class HQueryController {
 				}
 			}
 		return null;
+	}
+
+	private String sessionId;
+	private String progressMonitorActivated;
+
+	public String getProgressMonitorActivated() {
+		return progressMonitorActivated;
+	}
+
+	public void setProgressMonitorActivated(String progressMonitorActivated) {
+		this.progressMonitorActivated = progressMonitorActivated;
+	}
+
+	public List<JobStatus> getStatus(String sessionId) {
+		assert (StringUtils.isNotBlank(sessionId)) : "Session id shouldn't be null for getting status";
+		StatusChecker statusChecker = assembler.getStatusChecker();
+		return statusChecker.getStatus(sessionId);
+	}
+
+	private Map<String, Integer> statusMap = new HashMap<String, Integer>();
+
+	public void checkStatus(ActionEvent event) {
+		StatusChecker statusChecker = assembler.getStatusChecker();
+		StringBuilder sb = new StringBuilder();
+		if (StringUtils.isBlank(statusString)) {
+			sb.append("\n");
+			sb.append("Job Progress Status: ");
+		}
+		StatusEnum overallStatus = statusChecker.checkStatus(sessionId);
+		if (overallStatus == StatusEnum.UNKNOWN) {
+			sb.append("\nUnknown ");
+		} else if (overallStatus == StatusEnum.COMPLETED) {
+			sb.append("\nCompleted ");
+			progressMonitorActivated = "false";
+		} else {
+			List<JobStatus> statuses = getStatus(sessionId);
+			if (statuses != null && !statuses.isEmpty()) { //iterate through the statuses of the jobs belongs a particular session
+				int prepCounter = 0;
+				int runningCounter = 0;
+				for (JobStatus status : statuses) {
+					if (status.getRunState() == JobStatus.RUNNING)
+						runningCounter++;
+					else if (status.getRunState() == JobStatus.PREP)
+						prepCounter++;
+				}
+				if ((prepCounter == statuses.size())
+						&& (statusMap.get(sessionId) == null || statusMap.get(
+								sessionId).intValue() != JobStatus.PREP)) {
+					statusMap.put(sessionId, JobStatus.PREP);
+					sb.append("\nPreparing ");
+				} else if ((runningCounter > 0)
+						&& (statusMap.get(sessionId) == null || statusMap.get(
+								sessionId).intValue() != JobStatus.RUNNING)) {
+					statusMap.put(sessionId, JobStatus.RUNNING);
+					sb.append("\nRunning\n ");
+				} else if ((runningCounter > 0)
+						&& (statusMap.get(sessionId) == null || statusMap.get(
+								sessionId).intValue() == JobStatus.RUNNING)) {
+					for (JobStatus status : statuses) {
+						StringBuffer runningBuffer = new StringBuffer();
+						Formatter formatter = new Formatter(runningBuffer);
+						formatter
+								.format("\t[Job Id %d] Map progress: %.1f%%, Reduce Progress: %.1f%%%n",
+										status.getJobID().getId(),
+										status.mapProgress() * 100,
+										status.reduceProgress() * 100);
+						formatter.flush();
+						formatter.close();
+						sb.append(runningBuffer);
+					}
+				} else {
+					sb.append("..");
+				}
+			}
+		}
+		statusString += sb.toString();
+	}
+
+	private String statusString;
+
+	public String getStatusString() {
+		return statusString;
+	}
+
+	public void setStatusString(String statusString) {
+		this.statusString = statusString;
 	}
 
 }

@@ -14,9 +14,22 @@
 			var element = document.getElementById(id);
 			element.style.display = 'block'
 		}
+		function fireStatusMonitor() {
+			if (document.getElementById('hqueryform:monitorFlag').value == "true") {
+				nIntervId = setInterval(updateStatus, 5000);
+			}else{
+				clearInterval(nIntervId);	
+			}
+		}
+		function updateStatus() {
+			document.getElementById('hqueryform:hdnStatusUpdaterBtn').click();
+		}
+		function stopStatusCheck() {
+			clearInterval(nIntervId);
+		}
 	</script>
 </h:head>
-<h:body>
+<h:body onload="fireStatusMonitor();">
 	<f:view>
 		<f:verbatim>
 			<img src="HQuery-logo.png" align="left" alt="HQuery Logo" />
@@ -24,7 +37,7 @@
 			<br />
 			<br />
 		</f:verbatim>
-		<h:form>
+		<h:form id="hqueryform">
 			<h:outputLabel value="Select table" />
 			<h:selectManyCheckbox id="tables"
 				value="#{hQueryController.selectedTables}">
@@ -159,9 +172,20 @@
 			</f:verbatim>
 			<h:commandButton value="Process"
 				actionListener="#{hQueryController.processQuery}" />
+			<h:inputHidden value="#{hQueryController.progressMonitorActivated}"
+				id="monitorFlag" />
+			<h:commandButton id="hdnStatusUpdaterBtn"
+				actionListener="#{hQueryController.checkStatus}"
+				style="display: none;">
+				<f:ajax execute="@form" render="statusString" />
+			</h:commandButton>
 			<f:verbatim>
 				<hr />
 			</f:verbatim>
+			<h:outputLabel value="Job Status" />
+			<br />
+			<h:inputTextarea value="#{hQueryController.statusString}" cols="100"
+				rows="10" id="statusString" />
 		</h:form>
 
 	</f:view>

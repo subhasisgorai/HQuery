@@ -85,9 +85,11 @@ public class JobStatusCheckerImpl implements StatusChecker {
 	}
 
 	private boolean getCompletedStatus(String sessionId) {
-		return (completedMap.get(sessionId) != null) ? completedMap
-				.get(sessionId) : false;
-
+		assert (sessionId != null) : "Session Id for status checking shouldn't be null";
+		if (completedMap != null && completedMap.containsKey(sessionId))
+			return completedMap.get(sessionId);
+		else
+			return false;
 	}
 
 	private List<JobStatus> getStatusList(String sessionId) {

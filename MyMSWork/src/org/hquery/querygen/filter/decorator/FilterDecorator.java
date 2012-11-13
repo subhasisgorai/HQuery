@@ -75,5 +75,9 @@ public class FilterDecorator extends Filter {
 	public FilterDecorator(Column column, LogicalOperator operator, String value) {
 		super(column, operator, value);
 	}
+	
+	public FilterDecorator(){
+		
+	}
 
 }

@@ -2,6 +2,7 @@ package org.hquery.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,10 +10,18 @@ import javax.faces.component.UIData;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.hadoop.hive.metastore.api.FieldSchema;
 import org.hquery.assembler.HQueryAssembler;
+import org.hquery.common.util.UserPreferences;
+import org.hquery.common.util.UserPreferences.FileType;
 import org.hquery.metastore.MetaInformationService;
+import org.hquery.querygen.dbobjects.Column.DataType;
 import org.hquery.querygen.dbobjects.LogicalOperator;
+import org.hquery.querygen.dbobjects.Table;
+import org.hquery.querygen.filter.decorator.FilterDecorator;
+import org.hquery.querygen.query.Query;
+import org.hquery.querygen.query.QueryType;
 
 public class HQueryController {
 	private HQueryAssembler assembler;
@@ -59,8 +68,6 @@ public class HQueryController {
 	private List<SelectItem> columns;
 
 	public List<SelectItem> getColumns() {
-		MetaInformationService metaService = assembler
-				.getMetaInformationService();
 		String[] selectedTables = getSelectedTables();
 		if (selectedTables != null && selectedTables.length > 0) {
 			columns = new ArrayList<SelectItem>();
@@ -69,11 +76,13 @@ public class HQueryController {
 					columns.addAll(tableColumnsMap.get(table));
 				} else {
 					List<SelectItem> tempColumns = new ArrayList<SelectItem>();
+					MetaInformationService metaService = assembler
+							.getMetaInformationService();
 					List<FieldSchema> fields = metaService.listFields(table);
 					for (FieldSchema field : fields) {
 						tempColumns.add(new SelectItem(new Column(field
-								.getName(), table), field.getName() + " ["
-								+ table + "]"));
+								.getName(), table, field.getType()), field
+								.getName() + " [" + table + "]"));
 					}
 					tableColumnsMap.put(table, tempColumns);
 					columns.addAll(tableColumnsMap.get(table));
@@ -86,11 +95,6 @@ public class HQueryController {
 
 	public void setColumns(List<SelectItem> columns) {
 		this.columns = columns;
-	}
-
-	public void processQuery(ActionEvent event) {
-		System.out.println(selectedColumns);
-
 	}
 
 	public String addFilter() {
@@ -176,6 +180,7 @@ public class HQueryController {
 	}
 
 	public HQueryController() {
+
 		innerOperators = new ArrayList<String>();
 		innerOperators.add(LogicalOperator.EQ.toString());
 		innerOperators.add(LogicalOperator.GE.toString());
@@ -256,4 +261,122 @@ public class HQueryController {
 	public boolean isRenderFunctionTable() {
 		return columnFunctions != null && columnFunctions.size() > 0;
 	}
+
+	public void processQuery(ActionEvent event) {
+		System.out.println("Processing user input ...");
+
+		Query query = new Query();
+		if (selectedTables != null && selectedTables.length > 0
+				&& tableColumnsMap != null) {
+			String tableName = selectedTables[0]; // need to fix later when we support joins from UI
+			Table table = new Table(tableName);
+
+			//processing projected columns and functions
+			if (!CollectionUtils.isEmpty(selectedColumns))
+				for (Column selectedColumn : selectedColumns) {
+					org.hquery.querygen.dbobjects.Column queryGenColumn = getQueryGenColumn(
+							table, selectedColumn);
+
+					if (!CollectionUtils.isEmpty(columnFunctions)) {
+						for (ColumnFunction columnFunction : columnFunctions) {
+							if (columnFunction.getColumn().equals(
+									selectedColumn)) {
+								queryGenColumn.setFunctionName(columnFunction
+										.getFunctionName());
+								break;
+							}
+						}
+					}
+					table.addProjectedColumn(queryGenColumn);
+				}
+
+			//processing group by
+			if (!CollectionUtils.isEmpty(groupByColumns)) {
+				for (Column groupByColumn : groupByColumns) {
+					table.addGroupByColumn(getQueryGenColumn(table,
+							groupByColumn));
+				}
+			}
+
+			//processing filters
+			org.hquery.querygen.filter.Filter queryGenFilter = null;
+			if (!CollectionUtils.isEmpty(filters)) {
+				Iterator<Filter> filterIterator = filters.iterator();
+				queryGenFilter = transformFilter(filterIterator.next(), table);
+				while (filterIterator.hasNext()) {
+					FilterDecorator filterDecorator = (FilterDecorator) transformFilter(
+							filterIterator.next(), table);
+					filterDecorator.setFilter(queryGenFilter);
+					queryGenFilter = filterDecorator;
+				}
+
+			}
+			table.setFilter(queryGenFilter);
+			query.setTable(table);
+			query.setQueryType(QueryType.SELECT_QUERY); //hard-coded for the time being
+		}
+
+		//processing user preferences
+		UserPreferences pref = new UserPreferences();
+		pref.setOutputFileType(FileType.CSV_TYPE);
+		pref.setOutputFile("/Users/subhasig/test.txt");
+
+		//now execute the query
+		String sessionId = assembler.executeQuery(query, pref);
+		System.out.println("Session Id: " + sessionId);
+
+		//not required for this web application
+//		try {
+//			Thread.sleep(Long.parseLong(HQueryUtil.getResourceString(
+//					"hquery-conf", "hquery.cooldown.period"))); //giving other daemon thread a chance to graceful stop 
+//		} catch (NumberFormatException e) {
+//			e.printStackTrace();
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+	}
+
+	private org.hquery.querygen.filter.Filter transformFilter(Filter filter,
+			Table table) {
+		org.hquery.querygen.filter.Filter queryGenFilter = null;
+		if (filter.getOuterOperator() != null) {
+			queryGenFilter = new FilterDecorator();
+			((FilterDecorator) queryGenFilter).setOuterOperator(filter
+					.getOuterOperator());
+		} else {
+			queryGenFilter = new org.hquery.querygen.filter.Filter();
+		}
+		queryGenFilter.setColumn(getQueryGenColumn(table, filter.getColumn()));
+		queryGenFilter.setOperator(filter.getInnerOperator());
+		queryGenFilter.setValue(filter.getValue());
+		return queryGenFilter;
+	}
+
+	private Map<String, org.hquery.querygen.dbobjects.Column> columnMap = new HashMap<String, org.hquery.querygen.dbobjects.Column>();
+
+	public org.hquery.querygen.dbobjects.Column getQueryGenColumn(Table table,
+			Column selectedColumn) {
+		if (columnMap.containsKey(table.getTableName() + "."
+				+ selectedColumn.getName()))
+			return columnMap.get(table.getTableName() + "."
+					+ selectedColumn.getName());
+		else
+			for (SelectItem item : tableColumnsMap.get(table.getTableName())) {
+				Column column = (Column) item.getValue();
+				if (column.equals(selectedColumn)) {
+					org.hquery.querygen.dbobjects.Column queryGenColumn = new org.hquery.querygen.dbobjects.Column();
+					queryGenColumn.setColumnName(column.getName());
+					queryGenColumn.setOwningTable(table);
+					queryGenColumn.setDataType(DataType.valueOf(column
+							.getType().toUpperCase()));
+					columnMap.put(
+							table.getTableName() + "."
+									+ selectedColumn.getName(), queryGenColumn);
+					return queryGenColumn;
+				}
+			}
+		return null;
+	}
+
 }

@@ -6,10 +6,25 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 public class Column {
 	private String name;
 	private String owningTable;
+	private String type;
+
+	public Column(String name, String owningTable, String type) {
+		this.name = name;
+		this.owningTable = owningTable;
+		this.type = type;
+	}
 
 	public Column(String name, String owningTable) {
 		this.name = name;
 		this.owningTable = owningTable;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getName() {

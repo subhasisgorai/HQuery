@@ -14,15 +14,23 @@
 			var element = document.getElementById(id);
 			element.style.display = 'block'
 		}
+
+		var nIntervId;
+
 		function fireStatusMonitor() {
 			if (document.getElementById('hqueryform:monitorFlag').value == "true") {
 				nIntervId = setInterval(updateStatus, 5000);
-			}else{
-				clearInterval(nIntervId);	
+			} else {
+				clearInterval();
 			}
 		}
 		function updateStatus() {
-			document.getElementById('hqueryform:hdnStatusUpdaterBtn').click();
+			if (document.getElementById('hqueryform:monitorFlag').value == "false") {
+				stopStatusCheck();
+			} else {
+				document.getElementById('hqueryform:hdnStatusUpdaterBtn')
+						.click();
+			}
 		}
 		function stopStatusCheck() {
 			clearInterval(nIntervId);
@@ -167,17 +175,20 @@
 				</h:column>
 			</h:dataTable>
 			<br />
+			
 			<f:verbatim>
 				<hr />
 			</f:verbatim>
 			<h:commandButton value="Process"
 				actionListener="#{hQueryController.processQuery}" />
+			<h:commandButton value="Invalidate Session"
+				action="#{hQueryController.logout}" />
 			<h:inputHidden value="#{hQueryController.progressMonitorActivated}"
 				id="monitorFlag" />
 			<h:commandButton id="hdnStatusUpdaterBtn"
 				actionListener="#{hQueryController.checkStatus}"
 				style="display: none;">
-				<f:ajax execute="@form" render="statusString" />
+				<f:ajax execute="@form" render="statusString monitorFlag" />
 			</h:commandButton>
 			<f:verbatim>
 				<hr />

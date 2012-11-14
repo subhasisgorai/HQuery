@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.faces.component.UIData;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 
@@ -328,7 +329,7 @@ public class HQueryController {
 		this.sessionId = assembler.executeQuery(query, pref);
 		System.out.println("Session Id: " + this.sessionId);
 
-		progressMonitorActivated = "true";
+		this.progressMonitorActivated = "true";
 
 		//not required for this web application
 		//		try {
@@ -415,7 +416,7 @@ public class HQueryController {
 			sb.append("\nUnknown ");
 		} else if (overallStatus == StatusEnum.COMPLETED) {
 			sb.append("\nCompleted ");
-			progressMonitorActivated = "false";
+			this.progressMonitorActivated = "false";
 		} else {
 			List<JobStatus> statuses = getStatus(sessionId);
 			if (statuses != null && !statuses.isEmpty()) { //iterate through the statuses of the jobs belongs a particular session
@@ -469,5 +470,10 @@ public class HQueryController {
 	public void setStatusString(String statusString) {
 		this.statusString = statusString;
 	}
+	
+	public String logout() {
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "hQueryIndex.xhtml?faces-redirect=true";
+    }
 
 }

@@ -322,8 +322,24 @@ public class HQueryController {
 
 		//processing user preferences
 		UserPreferences pref = new UserPreferences();
-		pref.setOutputFileType(FileType.CSV_TYPE);
-		pref.setOutputFile("/Users/subhasig/test.txt");
+
+		String chosenOutputType = getSelectedFormat();
+		String outputFile = getOutputFile();
+
+		assert (!StringUtils.isBlank(chosenOutputType)) : "Output format must be chosen";
+		assert (!StringUtils.isBlank(outputFile)) : "Output file must not be null";
+
+		if ("Comma Delimited".equals(chosenOutputType)) {
+			pref.setOutputFileType(FileType.CSV_TYPE);
+		} else if ("Space Delimited".equals(chosenOutputType)) {
+			pref.setOutputFileType(FileType.SPACE_SEPARATED);
+		} else if ("Semicolon Delimited".equals(chosenOutputType)) {
+			pref.setOutputFileType(FileType.SEMICOLON_SEPARATED);
+		} else {
+			pref.setOutputFileType(FileType.CSV_TYPE);
+		}
+
+		pref.setOutputFile(outputFile.trim());
 
 		//now execute the query
 		this.sessionId = assembler.executeQuery(query, pref);
@@ -470,10 +486,37 @@ public class HQueryController {
 	public void setStatusString(String statusString) {
 		this.statusString = statusString;
 	}
-	
+
 	public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "hQueryIndex.xhtml?faces-redirect=true";
-    }
+		FacesContext.getCurrentInstance().getExternalContext()
+				.invalidateSession();
+		return "hQueryIndex.xhtml?faces-redirect=true";
+	}
+
+	public String[] getFormats() {
+		String[] formats = { "Default", "Space Delimited",
+				"Semicolon Delimited", "Comma Delimited" };
+		return formats;
+	}
+
+	private String selectedFormat;
+
+	public String getSelectedFormat() {
+		return selectedFormat;
+	}
+
+	public void setSelectedFormat(String selectedFormat) {
+		this.selectedFormat = selectedFormat;
+	}
+
+	private String outputFile;
+
+	public String getOutputFile() {
+		return outputFile;
+	}
+
+	public void setOutputFile(String outputFile) {
+		this.outputFile = outputFile;
+	}
 
 }

@@ -175,7 +175,19 @@
 				</h:column>
 			</h:dataTable>
 			<br />
-			
+			<f:verbatim>
+				<hr />
+			</f:verbatim>
+			<h:outputLabel value="User Preferences" />
+			<br />
+			<h:panelGrid columns="2" id="add_user_pref">
+				<h:outputLabel value="Output Format :" />
+				<h:selectOneMenu value="#{hQueryController.selectedFormat}">
+					<f:selectItems value="#{hQueryController.formats}" />
+				</h:selectOneMenu>
+				<h:outputLabel value="Value :" />
+				<h:inputText size="35" value="#{hQueryController.outputFile}" />
+			</h:panelGrid>
 			<f:verbatim>
 				<hr />
 			</f:verbatim>
